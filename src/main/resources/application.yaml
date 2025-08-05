@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: spring-ai-chat
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      embedding:
+        model: ${kdin.chat.embedding-model}
+      chat:
+        options:
+          model: llava
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334
+        collection-name: azure-rest-api
+        initialize-schema: true
+
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: DEBUG
+    org.apache.http.wire: DEBUG
+kdin:
+  chat:
+    embedding-model: nomic-embed-text
+    context-model: llama3.1:8b
