@@ -1,9 +1,9 @@
 package com.example.kdin.chat.service
 
+import com.example.kdin.chat.entity.Chunk
 import com.example.kdin.chat.gateway.ParserGateway
 import com.example.kdin.chat.repository.VectorRepository
 import org.slf4j.LoggerFactory
-import org.springframework.ai.document.Document
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
@@ -16,19 +16,11 @@ class VectorService(
 
     fun retrieveFromSource(source: String): Mono<Unit> {
         return parserGateway.getParsedSiteBySource(source)
-            .map {
-                it.map { dto ->
-                    Document
-                        .builder()
-                        .text(dto.text)
-                        .metadata("metadata", mapOf(Pair("source", source)))
-                        .build()
-                }
-            }
+            .map { it.map { dto -> Chunk(text = dto.text, metadata = mapOf(Pair("source", source))) } }
             .flatMap { Mono.defer { Mono.just(vectorRepository.saveDocument(it)).publishOn(Schedulers.parallel()) } }
     }
 
-    fun getSimilarDocs(query: String): Mono<List<Document>> {
+    fun getSimilarDocs(query: String): Mono<List<Chunk>> {
         return Mono.just(vectorRepository.findDocuments(query).sortedBy { it.score }.reversed())
             .doOnNext { log.info("Get similar docs ${it.map { doc -> doc.text }.toList()} for query $query") }
     }

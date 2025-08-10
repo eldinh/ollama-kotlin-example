@@ -1,7 +1,7 @@
 package com.example.kdin.chat.controller
 
+import com.example.kdin.chat.entity.Chunk
 import com.example.kdin.chat.service.VectorService
-import org.springframework.ai.document.Document
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
@@ -17,7 +17,7 @@ class VectorController(
     }
 
     @GetMapping
-    fun getSimilarDocs(@RequestParam query: String): Mono<List<Document>> {
+    fun getSimilarDocs(@RequestParam query: String): Mono<List<Chunk>> {
         return vectorService.getSimilarDocs(query)
     }
 }

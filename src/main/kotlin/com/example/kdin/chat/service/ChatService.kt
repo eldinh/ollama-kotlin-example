@@ -21,7 +21,7 @@ class ChatService(
                     questions.map { question ->
                         vectorService.getSimilarDocs(question)
                             .map {
-                                it.mapNotNull { doc -> doc.text }
+                                it.map { doc -> doc.text }
                                     .reduce { acc, document -> acc + "\n" + document }
                             }
                     }).flatMap { x -> x }.reduce { t, u -> t.plus(u) }

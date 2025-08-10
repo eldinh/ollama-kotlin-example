@@ -3,12 +3,9 @@ spring:
     name: spring-ai-chat
   ai:
     ollama:
-      base-url: http://localhost:11434
+      base-url: ${kdin.chat.ollama-url}
       embedding:
         model: ${kdin.chat.embedding-model}
-      chat:
-        options:
-          model: llava
     vectorstore:
       qdrant:
         host: localhost
@@ -23,4 +20,10 @@ logging:
 kdin:
   chat:
     embedding-model: nomic-embed-text
-    context-model: llama3.1:8b
+    context-model: qwen2.5:7b
+    ollama:
+      url: http://localhost:11434
+    qdrant:
+      host: localhost
+      port: 6334
+      collection-name: azure-rest-api
